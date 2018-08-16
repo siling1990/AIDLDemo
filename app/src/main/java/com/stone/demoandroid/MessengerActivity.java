@@ -4,12 +4,14 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.stone.demoandroid.service.MessengerService;
 
@@ -24,6 +26,8 @@ public class MessengerActivity extends AppCompatActivity {
             Bundle data = new Bundle();
             data.putString(" msg", " hello, this is client.");
             msg.setData(data);
+            //添加处理回复的Messenger
+            msg.replyTo = mGetReplyMessenger;
             try {
                 mService.send(msg);
             } catch (RemoteException e) {
@@ -33,7 +37,19 @@ public class MessengerActivity extends AppCompatActivity {
         public void onServiceDisconnected(ComponentName className) {
         }
     };
-
+    private Messenger mGetReplyMessenger = new Messenger(new MessengerHandler());
+    private static class MessengerHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 2:
+                    Log.i(TAG, " receive msg from Service:" + msg.getData().getString(" reply"));
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
