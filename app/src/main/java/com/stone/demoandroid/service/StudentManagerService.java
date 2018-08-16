@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -24,7 +25,7 @@ public class StudentManagerService extends Service {
     private static final String TAG = "StudentMS";
     private AtomicBoolean mIsServiceDestoryed = new AtomicBoolean(false);
     private CopyOnWriteArrayList<Student> mStudentList = new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<IOnNewStudentArrivedListener> mListenerList = new CopyOnWriteArrayList<IOnNewStudentArrivedListener>();
+    private RemoteCallbackList<IOnNewStudentArrivedListener> mListenerList = new RemoteCallbackList<>();
     private Binder mBinder = new IStudentManager.Stub() {
         @Override
         public List<Student> getStudentList() throws RemoteException {
@@ -46,23 +47,12 @@ public class StudentManagerService extends Service {
 
         @Override
         public void registerListener(IOnNewStudentArrivedListener listener) throws RemoteException {
-            if (!mListenerList.contains(listener)) {
-                mListenerList.add(listener);
-            } else {
-                Log.d(TAG, " already exists.");
-            }
-            Log.d(TAG, " registerListener, size:" + mListenerList.size());
+            mListenerList.register(listener);
         }
 
         @Override
         public void unregisterListener(IOnNewStudentArrivedListener listener) throws RemoteException {
-            if (mListenerList.contains(listener)) {
-                mListenerList.remove(listener);
-                Log.d(TAG, " unregister listener succeed.");
-            } else {
-                Log.d(TAG, " not found, can not unregister.");
-            }
-            Log.d(TAG, " unregisterListener, current size:" + mListenerList.size());
+            mListenerList.unregister(listener);
         }
     };
 
@@ -89,12 +79,19 @@ public class StudentManagerService extends Service {
     private void onNewBookArrived(Student student) throws RemoteException {
 
         mStudentList.add(student);
-        Log.d(TAG, " onNewBookArrived, notify listeners:" + mListenerList.size());
-        for (int i = 0; i < mListenerList.size(); i++) {
-            IOnNewStudentArrivedListener listener = mListenerList.get(i);
-            Log.d(TAG, " onNewBookArrived, notify listener:" + listener);
-            listener.onNewStudentArrived(student);
+        final int N = mListenerList.beginBroadcast();
+        for (int i = 0; i < N; i++) {
+            IOnNewStudentArrivedListener l = mListenerList.getBroadcastItem(i);
+            if (l != null) {
+                try {
+                    l.onNewStudentArrived(student);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
         }
+        mListenerList.finishBroadcast();
+
     }
 
     private class ServiceWorker implements Runnable {
