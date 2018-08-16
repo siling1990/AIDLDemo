@@ -16,9 +16,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".service.MessengerService" android:process=":remote"/>
-        <service android:name=".service.StudentManagerService" android:process=":remote"/>
-        <activity android:name=".MessengerActivity"></activity>
+
+        <service
+            android:name=".service.MessengerService"
+            android:process=":remote" />
+        <service
+            android:name=".service.StudentManagerService"
+            android:process=":remote" />
+
+        <provider
+            android:name=".provider.StudentProvider"
+            android:authorities="com.stone.demoandroid.provider"
+            android:permission="com.stone.PROVIDER"
+            android:process=":provider" />
+
+        <activity android:name=".MessengerActivity" />
+        <activity android:name=".ProviderActivity"></activity>
     </application>
 
 </manifest>

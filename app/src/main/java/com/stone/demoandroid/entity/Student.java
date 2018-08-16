@@ -14,7 +14,9 @@ public class Student implements Parcelable {
         id = in.readInt();
         name = in.readString();
     }
+    public Student() {
 
+    }
     public Student(int id, String name) {
         this.id = id;
         this.name = name;
