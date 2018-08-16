@@ -16,7 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <service android:name=".service.MessengerService" android:process=":remote"/>
+        <service android:name=".service.StudentManagerService" android:process=":remote"/>
+        <activity android:name=".MessengerActivity"></activity>
     </application>
 
 </manifest>
