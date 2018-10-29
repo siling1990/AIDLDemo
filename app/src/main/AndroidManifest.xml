@@ -29,9 +29,8 @@
             android:authorities="com.stone.demoandroid.provider"
             android:permission="com.stone.PROVIDER"
             android:process=":provider" />
-
+        <activity android:name=".AidlActivity" />
         <activity android:name=".MessengerActivity" />
-        <activity android:name=".ProviderActivity"></activity>
+        <activity android:name=".ProviderActivity" />
     </application>
-
 </manifest>

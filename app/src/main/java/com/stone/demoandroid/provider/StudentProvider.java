@@ -21,15 +21,15 @@ public class StudentProvider extends ContentProvider {
     private static final String TAG = "StudentProvider";
 
     public static final String AUTHORITY = "com.stone.demoandroid.provider";
-    public static final Uri STUDENT_CONTENT_URI = Uri.parse(" content://" + AUTHORITY + "/student");
-    public static final Uri USER_CONTENT_URI = Uri.parse(" content://" + AUTHORITY + "/user");
+    public static final Uri STUDENT_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/student");
+    public static final Uri USER_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/user");
     public static final int STUDENT_URI_CODE = 0;
     public static final int USER_URI_CODE = 1;
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        sUriMatcher.addURI(AUTHORITY, " student", STUDENT_URI_CODE);
-        sUriMatcher.addURI(AUTHORITY, " user", USER_URI_CODE);
+        sUriMatcher.addURI(AUTHORITY, "student", STUDENT_URI_CODE);
+        sUriMatcher.addURI(AUTHORITY, "user", USER_URI_CODE);
     }
 
     private Context mContext;
@@ -37,7 +37,7 @@ public class StudentProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        Log.d(TAG, " onCreate, current thread:" + Thread.currentThread().getName());
+        Log.i(TAG, " onCreate, current thread:" + Thread.currentThread().getName());
         mContext = getContext();
         initProviderData();
         return true;
@@ -57,7 +57,8 @@ public class StudentProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
-        Log.d(TAG, " query, current thread:" + Thread.currentThread().getName());
+        Log.i(TAG, " query, current thread:" + Thread.currentThread().getName());
+        Log.i(TAG,"uri: "+uri);
         String table = getTableName(uri);
         if (table == null) {
             throw new IllegalArgumentException(" Unsupported URI: " + uri);
@@ -69,14 +70,14 @@ public class StudentProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        Log.d(TAG, " getType");
+        Log.i(TAG, " getType");
         return null;
     }
 
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        Log.d(TAG, " insert");
+        Log.i(TAG, " insert");
         String table = getTableName(uri);
         if (table == null) {
             throw new IllegalArgumentException(" Unsupported URI: " + uri);
@@ -88,7 +89,7 @@ public class StudentProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        Log.d(TAG, " delete");
+        Log.i(TAG, " delete");
         String table = getTableName(uri);
         if (table == null) {
             throw new IllegalArgumentException(" Unsupported URI: " + uri);
@@ -102,7 +103,7 @@ public class StudentProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        Log.d(TAG, " update");
+        Log.i(TAG, " update");
         String table = getTableName(uri);
         if (table == null) {
             throw new IllegalArgumentException(" Unsupported URI: " + uri);
@@ -126,6 +127,7 @@ public class StudentProvider extends ContentProvider {
             default:
                 break;
         }
+        Log.i(TAG, " tableName :"+tableName);
         return tableName;
     }
 }
