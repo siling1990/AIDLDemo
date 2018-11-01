@@ -21,4 +21,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="ProviderActivity" />
+    <ListView
+        android:id="@+id/lv_anim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layoutAnimation="@anim/animation_layout"
+        android:divider="#dddbdb"
+        android:dividerHeight="1dp"
+        android:listSelector="@android:color/transparent">
+
+    </ListView>
 </LinearLayout>
