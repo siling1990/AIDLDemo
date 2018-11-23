@@ -1,9 +1,12 @@
 package com.stone.demoandroid;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.graphics.drawable.AnimationDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -13,6 +16,7 @@ import android.view.animation.LayoutAnimationController;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -61,6 +65,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Window window;
         WindowManager windowManager = getWindowManager();
+
+        Button btAdd = new Button(this);
+        btAdd.setText("手动添加按钮");
+
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT, 0, 0, PixelFormat.TRANSPARENT);
+        layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+        layoutParams.gravity = Gravity.LEFT;
+        layoutParams.x = 100;
+        layoutParams.y = 200;
+        windowManager.addView(btAdd, layoutParams);
+
+        Dialog dialog = new Dialog(this);
+
+        Toast.makeText(this,"我是Toast",Toast.LENGTH_SHORT).show();
     }
 
 
